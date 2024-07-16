@@ -11,19 +11,18 @@ const Form = ({ initialValues, onSubmit, children, validate }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-    {React.Children.map(children, child => {
-      if (React.isValidElement(child) && child.props.name) {
-        const error = handleValidation(child.props.name);
-        return React.cloneElement(child, {
-          value: values[child.props.name] || '',
-          onChange: handleChange,
-          error,
-        });
-      }
-      return child;
-    })}
-    <button type="submit">Submit</button>
-  </form>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child) && child.props.name) {
+          const error = handleValidation(child.props.name);
+          return React.cloneElement(child, {
+            value: values[child.props.name] || '',
+            onChange: handleChange,
+            error,
+          });
+        }
+        return child;
+      })}
+    </form>
   );
 };
 

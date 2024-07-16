@@ -7,7 +7,7 @@ const useForm = (initialValues, onSubmit) => {
     const { name, value } = e.target;
     setValues({
       ...values,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -19,7 +19,7 @@ const useForm = (initialValues, onSubmit) => {
   return {
     values,
     handleChange,
-    handleSubmit
+    handleSubmit,
   };
 };
 
