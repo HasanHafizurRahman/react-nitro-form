@@ -25,13 +25,14 @@ Here's a basic example of how to use react-nitro-form in your React application:
 
 ```jsx
 import React from 'react';
-import { Form, useForm, required, minLength } from 'react-nitro-form';
+import { useForm, required, minLength } from 'react-nitro-form';
 
 const App = () => {
   const initialValues = { name: '', email: '', password: '' };
 
   const handleSubmit = (values) => {
     console.log('Form values:', values);
+    // Handle form submission logic here
   };
 
   const validate = {
@@ -44,25 +45,28 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>react-nitro-form Example</h1>
+      <h1>React Nitro Form: Example</h1>
       <form onSubmit={handleFormSubmit}>
         <div>
           <label>
             Name:
             <input type="text" name="name" value={values.name} onChange={handleChange} />
           </label>
+          {validate.name && validate.name(values.name) && <p style={{ color: 'red' }}>{validate.name(values.name)}</p>}
         </div>
         <div>
           <label>
             Email:
             <input type="email" name="email" value={values.email} onChange={handleChange} />
           </label>
+          {validate.email && validate.email(values.email) && <p style={{ color: 'red' }}>{validate.email(values.email)}</p>}
         </div>
         <div>
           <label>
             Password:
             <input type="password" name="password" value={values.password} onChange={handleChange} />
           </label>
+          {validate.password && validate.password(values.password) && <p style={{ color: 'red' }}>{validate.password(values.password)}</p>}
         </div>
         <button type="submit">Submit</button>
       </form>
