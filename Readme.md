@@ -24,15 +24,15 @@ yarn add react-nitro-form
 Here's a basic example of how to use react-nitro-form in your React application:
 
 ```jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, required, minLength } from 'react-nitro-form';
 
 const App = () => {
   const initialValues = { name: '', email: '', password: '' };
+  const [submittedData, setSubmittedData] = useState(null);
 
-  const handleSubmit = (values) => {
-    console.log('Form values:', values);
-    // Handle form submission logic here
+  const handleFormSubmit = (values) => {
+    setSubmittedData(values);
   };
 
   const validate = {
@@ -41,35 +41,70 @@ const App = () => {
     password: minLength(6),
   };
 
-  const { values, handleChange, handleSubmit: handleFormSubmit } = useForm(initialValues, handleSubmit);
+  const { values, handleChange, handleSubmit } = useForm(initialValues, handleFormSubmit);
 
   return (
-    <div className="App">
-      <h1>React Nitro Form: Example</h1>
-      <form onSubmit={handleFormSubmit}>
-        <div>
-          <label>
-            Name:
-            <input type="text" name="name" value={values.name} onChange={handleChange} />
-          </label>
-          {validate.name && validate.name(values.name) && <p style={{ color: 'red' }}>{validate.name(values.name)}</p>}
-        </div>
-        <div>
-          <label>
-            Email:
-            <input type="email" name="email" value={values.email} onChange={handleChange} />
-          </label>
-          {validate.email && validate.email(values.email) && <p style={{ color: 'red' }}>{validate.email(values.email)}</p>}
-        </div>
-        <div>
-          <label>
-            Password:
-            <input type="password" name="password" value={values.password} onChange={handleChange} />
-          </label>
-          {validate.password && validate.password(values.password) && <p style={{ color: 'red' }}>{validate.password(values.password)}</p>}
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-700">React Nitro Form Demo</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-1">
+            <label className="block text-gray-700 font-semibold">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your name"
+            />
+            {validate.name(values.name) && <p className="text-red-500 text-sm">{validate.name(values.name)}</p>}
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-gray-700 font-semibold">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
+            />
+            {validate.email(values.email) && <p className="text-red-500 text-sm">{validate.email(values.email)}</p>}
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-gray-700 font-semibold">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
+            />
+            {validate.password(values.password) && <p className="text-red-500 text-sm">{validate.password(values.password)}</p>}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"
+          >
+            Submit
+          </button>
+        </form>
+      
+
+        {submittedData && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-inner">
+            <h2 className="text-lg font-semibold text-gray-600">Form Submission Result</h2>
+            <pre className="mt-2 p-2 bg-gray-100 rounded-lg text-gray-800 overflow-x-auto">
+              {JSON.stringify(submittedData, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
