@@ -1,16 +1,18 @@
-import React from 'react';
-import useForm from '../hooks/useForm';
-
-const Form = ({ initialValues, onSubmit, children, validate }) => {
-  const { values, handleChange, handleSubmit } = useForm(initialValues, onSubmit);
+const Form = ({ initialValues, onSubmit, onReset, children, validate }) => {
+  const { values, handleChange, handleSubmit, handleReset } = useForm(
+    initialValues,
+    onSubmit,
+    onReset
+  );
 
   const handleValidation = (name) => {
     const value = values[name];
-    return validate[name] ? validate[name](value) : undefined;
+    const fieldName = name.charAt(0).toUpperCase() + name.slice(1); // Capitalize field name
+    return validate[name] ? validate[name](value, fieldName, values) : undefined;
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} onReset={handleReset}>
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.props.name) {
           const error = handleValidation(child.props.name);
@@ -25,5 +27,3 @@ const Form = ({ initialValues, onSubmit, children, validate }) => {
     </form>
   );
 };
-
-export default Form;
