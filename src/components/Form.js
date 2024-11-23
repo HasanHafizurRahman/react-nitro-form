@@ -27,3 +27,4 @@ const Form = ({ initialValues, onSubmit, onReset, children, validate }) => {
     </form>
   );
 };
+export default Form;

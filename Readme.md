@@ -25,29 +25,37 @@ Here's a basic example of how to use react-nitro-form in your React application:
 
 ```jsx
 import React, { useState } from 'react';
-import { useForm, required, minLength } from 'react-nitro-form';
+import { useForm, required, minLength, isEmail } from 'react-nitro-form';
 
 const App = () => {
+  // Initial values for the form
   const initialValues = { name: '', email: '', password: '' };
   const [submittedData, setSubmittedData] = useState(null);
 
-  const handleFormSubmit = (values) => {
-    setSubmittedData(values);
-  };
-
+  // Enhanced validation rules
   const validate = {
-    name: required,
-    email: required,
-    password: minLength(6),
+    name: required, // Ensures the name is not empty
+    email: (value) => required(value) || isEmail(value), // Checks for both required and valid email
+    password: (value) => required(value) || minLength(6)(value), // Ensures password is required and has minimum length
   };
 
-  const { values, handleChange, handleSubmit } = useForm(initialValues, handleFormSubmit);
+  // Form submission handler
+  const handleFormSubmit = (values) => {
+    setSubmittedData(values); // Store the submitted data
+  };
+
+  // Initialize form hooks
+  const { values, handleChange, handleSubmit, handleReset } = useForm(
+    initialValues,
+    handleFormSubmit
+  );
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-6">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-700">React Nitro Form Demo</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Name Field */}
           <div className="space-y-1">
             <label className="block text-gray-700 font-semibold">Name</label>
             <input
@@ -58,9 +66,12 @@ const App = () => {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your name"
             />
-            {validate.name(values.name) && <p className="text-red-500 text-sm">{validate.name(values.name)}</p>}
+            {validate.name(values.name) && (
+              <p className="text-red-500 text-sm">{validate.name(values.name)}</p>
+            )}
           </div>
 
+          {/* Email Field */}
           <div className="space-y-1">
             <label className="block text-gray-700 font-semibold">Email</label>
             <input
@@ -71,9 +82,12 @@ const App = () => {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
             />
-            {validate.email(values.email) && <p className="text-red-500 text-sm">{validate.email(values.email)}</p>}
+            {validate.email(values.email) && (
+              <p className="text-red-500 text-sm">{validate.email(values.email)}</p>
+            )}
           </div>
 
+          {/* Password Field */}
           <div className="space-y-1">
             <label className="block text-gray-700 font-semibold">Password</label>
             <input
@@ -84,18 +98,30 @@ const App = () => {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
             />
-            {validate.password(values.password) && <p className="text-red-500 text-sm">{validate.password(values.password)}</p>}
+            {validate.password(values.password) && (
+              <p className="text-red-500 text-sm">{validate.password(values.password)}</p>
+            )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"
-          >
-            Submit
-          </button>
+          {/* Buttons */}
+          <div className="flex justify-between">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-200"
+            >
+              Reset
+            </button>
+          </div>
         </form>
-      
 
+        {/* Display Submitted Data */}
         {submittedData && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-inner">
             <h2 className="text-lg font-semibold text-gray-600">Form Submission Result</h2>
