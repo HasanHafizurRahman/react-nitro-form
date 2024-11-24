@@ -1,4 +1,3 @@
-```markdown
 # react-nitro-form
 
 `react-nitro-form` is a lightweight React library for managing forms with built-in validation support. It simplifies form handling in React by providing a declarative way to manage state, validation, and submission.
