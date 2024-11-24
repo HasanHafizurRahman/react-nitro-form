@@ -1,7 +1,19 @@
 ```markdown
 # react-nitro-form
 
-react-nitro-form is a lightweight React form handling library that helps you manage forms in React applications easily. It provides a simple API to handle form state, validation, and submission.
+`react-nitro-form` is a lightweight React library for managing forms with built-in validation support. It simplifies form handling in React by providing a declarative way to manage state, validation, and submission.
+
+---
+
+## Features
+
+- **Declarative Form Management:** Easily manage form state with the `useForm` hook .
+- **Customizable Validation:** Includes common validators (e.g., required, minLength, maxLength, email) and allows custom validation rules.
+- **Error Handling:** Passes validation errors to form fields for display.
+- **Reset Functionality:** Provides reset handling for form values.
+- **Easy Integration:** Works seamlessly with any React application.
+
+---
 
 ## Installation
 
@@ -192,7 +204,7 @@ const App = () => {
 export default App;
 ```
 
-### Validators
+## Validators
 
 **react-nitro-form** includes a set of built-in validators to handle common validation requirements. These validators are designed to be simple yet powerful, enabling you to ensure that form fields meet specific requirements.
 
