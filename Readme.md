@@ -86,8 +86,10 @@ const App = () => {
 
 export default App;
 ```
+
 ### Advanced Example
 **Validation with Multiple Rules**
+(note: use tailwind css to get the styles)  
 ```jsx
 import React, { useState } from 'react';
 import { useForm, required, minLength, isEmail } from 'react-nitro-form';
