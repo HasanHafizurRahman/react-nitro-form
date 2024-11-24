@@ -24,6 +24,60 @@ yarn add react-nitro-form
 Here's a basic example of how to use react-nitro-form in your React application:
 
 ```jsx
+import React from 'react';
+import { useForm, required, minLength } from 'react-nitro-form';
+
+const App = () => {
+  const initialValues = { username: '', password: '' };
+
+  const validate = {
+    username: required, // Ensures username is not empty
+    password: minLength(6), // Ensures password is at least 6 characters long
+  };
+
+  const { values, handleChange, handleSubmit, handleReset } = useForm(
+    initialValues,
+    (values) => alert('Form Submitted: ' + JSON.stringify(values)),
+    () => alert('Form Reset')
+  );
+
+  return (
+    <form onSubmit={handleSubmit} onReset={handleReset}>
+      <div>
+        <label>Username:</label>
+        <input
+          type="text"
+          name="username"
+          value={values.username}
+          onChange={handleChange}
+        />
+        {validate.username(values.username) && (
+          <p>{validate.username(values.username)}</p>
+        )}
+      </div>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={values.password}
+          onChange={handleChange}
+        />
+        {validate.password(values.password) && (
+          <p>{validate.password(values.password)}</p>
+        )}
+      </div>
+      <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
+    </form>
+  );
+};
+
+export default App;
+```
+### Advanced Example
+**Validation with Multiple Rules**
+```jsx
 import React, { useState } from 'react';
 import { useForm, required, minLength, isEmail } from 'react-nitro-form';
 
@@ -140,31 +194,147 @@ export default App;
 
 ### Validators
 
-react-nitro-form provides a set of built-in validators that you can use to validate your form fields.
+**react-nitro-form** includes a set of built-in validators to handle common validation requirements. These validators are designed to be simple yet powerful, enabling you to ensure that form fields meet specific requirements.
+
+---
+
+#### How Validators Work
+
+Validators are functions that check the value of a field and return an error message if the validation fails. When no error occurs, the validator returns `undefined`. Each validator can be assigned to a form field in the `validate` object, which maps field names to their corresponding validation functions.
+
+Validators also support **customizable field names**. If a `fieldName` is not provided, the default value is used.
+
+---
+
+### Built-in Validators
+
+Here’s a list of the built-in validators and their usage:
 
 #### `required`
 
-Checks if a field is not empty.
+Ensures the field is not empty.
+
+- **Arguments:**
+  - `value`: The value of the field.
+  - `fieldName` (optional): The name of the field (default: `"This field"`).
 
 ```jsx
 import { required } from 'react-nitro-form';
 
 const validate = {
-  name: required,
+  username: required,
 };
 ```
 
+If `username` is empty, an error message like `"Username is required"` will be displayed.
+
+---
+
 #### `minLength`
 
-Checks if a field has a minimum length.
+Ensures the value has at least the specified number of characters.
+
+- **Arguments:**
+  - `min`: The minimum length.
+  - `value`: The value of the field.
+  - `fieldName` (optional): The name of the field (default: `"This field"`).
 
 ```jsx
 import { minLength } from 'react-nitro-form';
 
 const validate = {
-  password: minLength(6),
+  password: minLength(8),
 };
 ```
+
+If `password` is shorter than 8 characters, an error message like `"Password must be at least 8 characters long"` will be displayed.
+
+---
+
+#### `maxLength`
+
+Ensures the value does not exceed the specified number of characters.
+
+- **Arguments:**
+  - `max`: The maximum length.
+  - `value`: The value of the field.
+  - `fieldName` (optional): The name of the field (default: `"This field"`).
+
+```jsx
+import { maxLength } from 'react-nitro-form';
+
+const validate = {
+  username: maxLength(15),
+};
+```
+
+If `username` exceeds 15 characters, an error message like `"Username must not exceed 15 characters"` will be displayed.
+
+---
+
+#### `isEmail`
+
+Ensures the value is a valid email address.
+
+- **Arguments:**
+  - `value`: The value of the field.
+  - `fieldName` (optional): The name of the field (default: `"Email"`).
+
+```jsx
+import { isEmail } from 'react-nitro-form';
+
+const validate = {
+  email: isEmail,
+};
+```
+
+If `email` is not a valid email address, an error message like `"Email must be a valid email address"` will be displayed.
+
+---
+
+#### `match`
+
+Ensures the value matches another field's value.
+
+- **Arguments:**
+  - `matchField`: The name of the field to match.
+  - `value`: The value of the field.
+  - `values`: The full set of form values.
+  - `fieldName` (optional): The name of the field (default: `"This field"`).
+
+```jsx
+import { match } from 'react-nitro-form';
+
+const validate = {
+  confirmPassword: match('password'),
+};
+```
+
+If `confirmPassword` does not match `password`, an error message like `"ConfirmPassword must match password"` will be displayed.
+
+---
+
+#### `customValidator`
+
+Enables custom validation logic.
+
+- **Arguments:**
+  - `callback`: A function that returns `true` if the value is valid or `false` otherwise.
+  - `errorMessage`: The custom error message to display.
+  - `value`: The value of the field.
+  - `fieldName`: The name of the field.
+
+```jsx
+import { customValidator } from 'react-nitro-form';
+
+const isEven = (num) => num % 2 === 0;
+
+const validate = {
+  number: customValidator(isEven, 'The number must be even'),
+};
+```
+
+If `number` is not even, an error message like `"The number must be even"` will be displayed.
 
 ## Development
 
